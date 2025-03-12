@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>assign.team 👫</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        .setup-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background-color: #fff;
+            position: relative;
+            padding-bottom: 180px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .control-label {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .counter-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        .counter-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 22px;
+            border: none;
+            background-color: #f0f0f0;
+            color: #555;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            touch-action: manipulation;
+        }
+        
+        .counter-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .counter-value {
+            margin: 0 20px;
+            font-size: 22px;
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .info-container {
+            position: absolute;
+            bottom: 90px;
+            left: 0;
+            right: 0;
+            padding: 0 30px;
+        }
+        
+        .info-text {
+            color: #666;
+            font-style: italic;
+            min-height: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        
+        .button-container {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            padding: 0 30px;
+        }
+        
+        .start-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .start-btn:hover {
+            background-color: #3e8e41;
+        }
+        
+        .display-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .team-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0 50px 0;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .team-legend-item {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .player-number {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            max-width: 80%;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .next-btn {
+            padding: 16px 36px;
+            background-color: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            touch-action: manipulation;
+        }
+        
+        .next-btn:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+        
+        .done-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .done-screen h1 {
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .team-summary {
+            margin: 20px 0 40px 0;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            width: 100%;
+            text-align: center;
+        }
+        
+        .restart-btn {
+            padding: 16px 36px;
+            background-color: white;
+            color: #4CAF50;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+        
+        .footer {
+            position: relative;
+            width: 100%;
+            background-color: #f8f8f8;
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 50px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #666;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer img {
+            margin-top: 15px;
+            transform: scale(0.6);
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <h1>assign.team 👫</h1>
+        <p style="text-align: center; margin-bottom: 30px; color: #666;">Quickly assign players to teams without writing names - just point your phone at each player!</p>
+        
+        <div class="control-group">
+            <label class="control-label">Number of Teams</label>
+            <div class="counter-control">
+                <button class="counter-btn" id="team-minus">-</button>
+                <div class="counter-value" id="team-count">2</div>
+                <button class="counter-btn" id="team-plus">+</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Number of Players</label>
+            <div class="counter-control">
+                <button class="counter-btn" id="player-minus">-</button>
+                <div class="counter-value" id="player-count">4</div>
+                <button class="counter-btn" id="player-plus">+</button>
+            </div>
+        </div>
+        
+        <div class="info-container">
+            <div id="info-box" class="info-text"></div>
+        </div>
+        
+        <div class="button-container">
+            <button class="start-btn" id="go-btn">Start Shuffle</button>
+        </div>
+    </div>
+    
+    <footer class="footer" id="main-footer">
+        <p>Created by <a href="https://filipobornik.cz" target="_blank">Filip Oborník</a> | <a href="https://github.com/FilipObornik/Polarsteps-Trip-Text-Extractor" target="_blank">View source code on GitHub</a></p>
+        <p>Did the tool or article help you? 😇 I will appreciate your support 🙏</p>
+        <a href="https://www.buymeacoffee.com/filipobornik" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: auto !important; max-width: 60% !important;" ></a>   
+    </footer>
+    
+    <div class="display-screen" id="display-screen">
+        <div class="team-name" id="team-display">Created Teams</div>
+        <div id="team-legend" class="team-legend"></div>
+        <div class="player-number" id="player-display">Point phone to the user and click "Assign Player"</div>
+        <button class="next-btn" id="next-btn">Assign Player</button>
+    </div>
+    
+    <div class="done-screen" id="done-screen">
+        <h1>All Teams Assigned!</h1>
+        <div id="team-summary" class="team-summary"></div>
+        <button class="restart-btn" id="restart-btn">Restart</button>
+    </div>
+
+    <script>
+        // Team colors - we'll use these for the backgrounds
+        const teamColors = [
+            '#e74c3c', // Red
+            '#3498db', // Blue
+            '#2ecc71', // Green
+            '#f39c12', // Orange
+            '#9b59b6', // Purple
+            '#1abc9c', // Teal
+            '#e67e22', // Amber
+            '#34495e'  // Navy
+        ];
+        
+        // DOM elements
+        const teamMinusBtn = document.getElementById('team-minus');
+        const teamPlusBtn = document.getElementById('team-plus');
+        const teamCountEl = document.getElementById('team-count');
+        
+        const playerMinusBtn = document.getElementById('player-minus');
+        const playerPlusBtn = document.getElementById('player-plus');
+        const playerCountEl = document.getElementById('player-count');
+        
+        const infoBox = document.getElementById('info-box');
+        const goBtn = document.getElementById('go-btn');
+        const displayScreen = document.getElementById('display-screen');
+        const teamDisplay = document.getElementById('team-display');
+        const playerDisplay = document.getElementById('player-display');
+        const nextBtn = document.getElementById('next-btn');
+        const doneScreen = document.getElementById('done-screen');
+        const teamSummary = document.getElementById('team-summary');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // State variables
+        let numTeams = 2;
+        let numPlayers = 4;
+        let currentPlayerIndex = 0;
+        let teamAssignments = [];
+        
+        // Update the info message based on team distribution
+        function updateInfoMessage() {
+            const playersPerTeam = Math.floor(numPlayers / numTeams);
+            const extraPlayers = numPlayers % numTeams;
+            
+            if (extraPlayers === 0) {
+                infoBox.textContent = `Each team will have ${playersPerTeam} player${playersPerTeam !== 1 ? 's' : ''}.`;
+            } else {
+                const extraTeamText = extraPlayers === 1 ? '1 team' : `${extraPlayers} teams`;
+                const regularTeamText = (numTeams - extraPlayers) === 1 ? '1 team' : `${numTeams - extraPlayers} teams`;
+                
+                infoBox.textContent = `${extraTeamText} will have ${playersPerTeam + 1} player${playersPerTeam + 1 !== 1 ? 's' : ''}, and ${regularTeamText} will have ${playersPerTeam} player${playersPerTeam !== 1 ? 's' : ''}.`;
+            }
+        }
+        
+        // Create team assignments
+        function createTeamAssignments() {
+            // Create an array of player indices
+            const players = Array.from({ length: numPlayers }, (_, i) => i + 1);
+            
+            // Shuffle the players
+            for (let i = players.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [players[i], players[j]] = [players[j], players[i]];
+            }
+            
+            // Calculate how many players per team
+            const playersPerTeam = Math.floor(numPlayers / numTeams);
+            const extraPlayers = numPlayers % numTeams;
+            
+            // Assign players to teams
+            teamAssignments = Array(numPlayers).fill(0);
+            let playerIndex = 0;
+            
+            for (let team = 1; team <= numTeams; team++) {
+                const teamSize = team <= extraPlayers ? playersPerTeam + 1 : playersPerTeam;
+                
+                for (let i = 0; i < teamSize; i++) {
+                    if (playerIndex < players.length) {
+                        teamAssignments[players[playerIndex] - 1] = team;
+                        playerIndex++;
+                    }
+                }
+            }
+        }
+        
+        // Show the team for the current player
+        function showCurrentPlayer() {
+            if (currentPlayerIndex > numPlayers) {
+                showDoneSummary();
+                return;
+            }
+            
+            if (currentPlayerIndex === 0) {
+                // Show instruction screen for first player with team legend
+                teamDisplay.textContent = `Created Teams`;
+                playerDisplay.textContent = `Point phone to the first player and click "Assign Player"`;
+                displayScreen.style.backgroundColor = '#4CAF50'; // Green background
+                
+                // Create team legend
+                const teamLegend = document.getElementById('team-legend');
+                teamLegend.innerHTML = ''; // Clear any existing content
+                
+                for (let i = 1; i <= numTeams; i++) {
+                    const teamColor = teamColors[(i - 1) % teamColors.length];
+                    const teamItem = document.createElement('div');
+                    teamItem.className = 'team-legend-item';
+                    teamItem.style.backgroundColor = teamColor;
+                    teamItem.textContent = `Team ${i}`;
+                    teamLegend.appendChild(teamItem);
+                }
+                
+                teamLegend.style.display = 'flex';
+                displayScreen.style.display = 'flex';
+            } else {
+                // Hide team legend for player assignments
+                document.getElementById('team-legend').style.display = 'none';
+                
+                const playerNumber = currentPlayerIndex;
+                const teamNumber = teamAssignments[currentPlayerIndex - 1];
+                const teamColor = teamColors[(teamNumber - 1) % teamColors.length];
+                
+                teamDisplay.textContent = `Team ${teamNumber}`;
+                playerDisplay.textContent = `Player ${playerNumber}`;
+                displayScreen.style.backgroundColor = teamColor;
+                displayScreen.style.display = 'flex';
+            }
+        }
+        
+        // Show the final summary screen
+        function showDoneSummary() {
+            displayScreen.style.display = 'none';
+            
+            // Count players per team
+            const teamCounts = {};
+            for (let i = 0; i < teamAssignments.length; i++) {
+                const team = teamAssignments[i];
+                teamCounts[team] = (teamCounts[team] || 0) + 1;
+            }
+            
+            // Create summary text
+            let summaryText = '';
+            for (let team = 1; team <= numTeams; team++) {
+                const count = teamCounts[team] || 0;
+                summaryText += `Team ${team}: ${count} player${count !== 1 ? 's' : ''}<br>`;
+            }
+            
+            teamSummary.innerHTML = summaryText;
+            doneScreen.style.display = 'flex';
+        }
+        
+        // Event Listeners
+        teamMinusBtn.addEventListener('click', () => {
+            if (numTeams > 2) {
+                numTeams--;
+                teamCountEl.textContent = numTeams;
+                updateInfoMessage();
+            }
+        });
+        
+        teamPlusBtn.addEventListener('click', () => {
+            if (numTeams < 8) {
+                numTeams++;
+                teamCountEl.textContent = numTeams;
+                updateInfoMessage();
+            }
+        });
+        
+        playerMinusBtn.addEventListener('click', () => {
+            if (numPlayers > numTeams) {
+                numPlayers--;
+                playerCountEl.textContent = numPlayers;
+                updateInfoMessage();
+            }
+        });
+        
+        playerPlusBtn.addEventListener('click', () => {
+            numPlayers++;
+            playerCountEl.textContent = numPlayers;
+            updateInfoMessage();
+        });
+        
+        // Add touch event listeners to prevent double tap zoom
+        const touchElements = [teamMinusBtn, teamPlusBtn, playerMinusBtn, playerPlusBtn, nextBtn];
+        
+        touchElements.forEach(element => {
+            element.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                // Trigger click manually after preventing default
+                e.target.click();
+            });
+        });
+        
+        goBtn.addEventListener('click', () => {
+            // Hide the setup container first
+            document.querySelector('.setup-container').style.display = 'none';
+            document.getElementById('main-footer').style.display = 'none';
+            createTeamAssignments();
+            currentPlayerIndex = 0;
+            showCurrentPlayer();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentPlayerIndex === 0) {
+                // After the instruction screen, show the first player normally
+                currentPlayerIndex++;
+                
+                const playerNumber = currentPlayerIndex;
+                const teamNumber = teamAssignments[currentPlayerIndex - 1];
+                const teamColor = teamColors[(teamNumber - 1) % teamColors.length];
+                
+                // Hide team legend
+                document.getElementById('team-legend').style.display = 'none';
+                
+                // Update display for first player
+                teamDisplay.textContent = `Team ${teamNumber}`;
+                playerDisplay.textContent = `Player ${playerNumber}`;
+                displayScreen.style.backgroundColor = teamColor;
+            } else {
+                currentPlayerIndex++;
+                showCurrentPlayer();
+            }
+        });
+        
+        restartBtn.addEventListener('click', () => {
+            doneScreen.style.display = 'none';
+            document.querySelector('.setup-container').style.display = 'block';
+            document.getElementById('main-footer').style.display = 'block';
+            currentPlayerIndex = 0;
+        });
+        
+        // Initialize
+        updateInfoMessage();
+    </script>
+</body>
+</html>
